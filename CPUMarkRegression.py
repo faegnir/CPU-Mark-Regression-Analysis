@@ -7,8 +7,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 
-df = pd.read_excel('dataset3.xlsx')
-
+df = pd.read_excel('dataset4.xlsx')
 
 # Split the data into X and y
 X = df.iloc[:, 1:13].values
@@ -50,6 +49,7 @@ for a in tsize:
         sc_X = StandardScaler()
         X_train = sc_X.fit_transform(X_train)
         X_test = sc_X.transform(X_test)
+            
         sc_y = StandardScaler()
         y_train = sc_y.fit_transform(y_train)
         y_test = sc_y.transform(y_test)
