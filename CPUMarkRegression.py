@@ -37,7 +37,15 @@ for a in tsize:
     r2 = 0
     for i in range(loop):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=a)
+        #""" burada feature scale edilmeli mi ?
+        sc_X = MinMaxScaler()
+        X_train = sc_X.fit_transform(X_train)
+        X_test = sc_X.transform(X_test)
 
+        sc_y = MinMaxScaler()
+        y_train = sc_y.fit_transform(y_train) 
+        y_test = sc_y.fit_transform(y_test)
+        #"""
         model = LinearRegression()
         model.fit(X_train, y_train)
 
