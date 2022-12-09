@@ -5,6 +5,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 
 df = pd.read_excel('dataset3.xlsx')
 
@@ -37,7 +38,7 @@ for a in tsize:
     r2 = 0
     for i in range(loop):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=a)
-        #""" burada feature scale edilmeli mi ?
+        """ minmax or standart?
         sc_X = MinMaxScaler()
         X_train = sc_X.fit_transform(X_train)
         X_test = sc_X.transform(X_test)
@@ -46,6 +47,15 @@ for a in tsize:
         y_train = sc_y.fit_transform(y_train) 
         y_test = sc_y.fit_transform(y_test)
         #"""
+        sc_X = StandardScaler()
+        X_train = sc_X.fit_transform(X_train)
+        X_test = sc_X.transform(X_test)
+        sc_y = StandardScaler()
+        y_train = sc_y.fit_transform(y_train)
+        y_test = sc_y.transform(y_test)
+
+
+        
         model = LinearRegression()
         model.fit(X_train, y_train)
 
@@ -66,15 +76,13 @@ print("Best R2 score:", best_r2)
 
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=best_ratio)
 
-
-
-sc_X = MinMaxScaler()
+sc_X = StandardScaler()
 X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
 
-sc_y = MinMaxScaler()
-y_train = sc_y.fit_transform(y_train) 
-y_test = sc_y.fit_transform(y_test)
+sc_y = StandardScaler()
+y_train = sc_y.fit_transform(y_train)
+y_test = sc_y.transform(y_test)
 
 
 model = LinearRegression()
