@@ -1,20 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Dec  9 03:02:23 2022
-
-@author: Acer
-"""
 import numpy as np
-
 import pandas as pd
+
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
 
-# Create a LabelEncoder object
-# Load the dataset
 df = pd.read_excel('dataset3.xlsx')
 
 
@@ -42,7 +33,7 @@ a = 0
 print(tsize)
 
 
-for a in range(5):
+for a in range(len(tsize)):
     while i < 500:
        X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=tsize[a])
        """
