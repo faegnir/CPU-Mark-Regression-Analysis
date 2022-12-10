@@ -1,11 +1,12 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 df = pd.read_excel('dataset4.xlsx')
 
@@ -29,7 +30,6 @@ best_ratio = 0
 best_r2 = 0
 loop = 500
 tsize = [0.2,0.25,0.3,0.35,0.4]
-
 print(tsize)
 
 
@@ -101,3 +101,18 @@ print('\nMAE:', mae)
 print('MSE:', mse)
 print('RMSE:', rmse)
 print('R^2:', r2)
+
+# Print the pie chart
+sizes = abs(model.coef_.flatten())
+labels = df.columns[1:-1]
+colors = ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'pink', 'cyan', 'magenta', 'brown'] 
+
+plt.pie(sizes, labels=labels, colors=colors)
+plt.title("Coefficients")
+plt.show()
+
+plt.bar(labels,sizes)
+plt.ylabel('Coefficients')
+plt.xticks(rotation=60,fontsize=10)
+plt.show()
+
