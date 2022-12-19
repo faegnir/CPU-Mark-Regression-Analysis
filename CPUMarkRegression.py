@@ -8,20 +8,15 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, StandardScaler
 from sklearn.impute import SimpleImputer
 
-df = pd.read_excel('dataset4.xlsx')
+df = pd.read_excel('dataset5.xlsx')
 
-X = df.iloc[:, 1:13].values
+X = df.iloc[:, 1:12].values
 y = df.iloc[:,-1].values
 y = y.reshape(-1, 1) 
 
-#data preprocessing
-imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
-imputer = imputer.fit(X[:,3:4])
-X[:, 3:4] = imputer.transform(X[:,3:4])
-
+#encoding
 labelencoder = LabelEncoder()
-X[:, 0] = labelencoder.fit_transform(X[:, 0])
-X[:, 2] = labelencoder.fit_transform(X[:, 2])
+X[:, 1] = labelencoder.fit_transform(X[:, 1])
 
 best_ratio = 0.3
 scaler = 1
@@ -29,7 +24,7 @@ scaler = 1
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=best_ratio)
 
 
-#feature scaling
+#feature scaling - 1 for minmax 0 for S.S
 if(scaler == 1):
     sc_X = MinMaxScaler()
     sc_y = MinMaxScaler()
@@ -91,9 +86,12 @@ plt.xlabel('y_train')
 plt.ylabel('tahminler')
 plt.show()
 
+import statsmodels.api as sm
 
+residuals = y_train - fitted_values
 
-
+sm.qqplot(residuals, line='s')
+plt.show()
 
 
 
