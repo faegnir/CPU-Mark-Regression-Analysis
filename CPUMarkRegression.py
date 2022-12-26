@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import xlsxwriter
+import statsmodels.api as sm
+import seaborn as sns
 
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -8,7 +11,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, StandardScaler
 from sklearn.impute import SimpleImputer
 
-df = pd.read_excel('dataset5.xlsx')
+df = pd.read_excel('dataset.xlsx')
 
 X = df.iloc[:, 1:12].values
 y = df.iloc[:,-1].values
@@ -21,7 +24,11 @@ X[:, 1] = labelencoder.fit_transform(X[:, 1])
 best_ratio = 0.3
 scaler = 1
 
-X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=best_ratio)
+#X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=best_ratio)
+X_train = pd.read_excel('./Best/X_train.xlsx').values
+X_test = pd.read_excel('./Best/X_test.xlsx').values
+y_train = pd.read_excel('./Best/y_train.xlsx').values
+y_test = pd.read_excel('./Best/y_test.xlsx').values
 
 
 #feature scaling - 1 for minmax 0 for S.S
@@ -43,7 +50,12 @@ model = LinearRegression()
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
-
+"""
+classifier = Sequential()
+classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu', input_dim = 11))
+classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu'))
+classifier.add(Dense(output_dim = 1, init = 'uniform', activation = 'sigmoid'))
+"""
 #metric calculation
 mae = mean_absolute_error(y_test, y_pred)
 mse = mean_squared_error(y_test, y_pred)
@@ -61,7 +73,7 @@ coefficients = model.coef_
 #print the pie chart
 sizes = abs(model.coef_.flatten())
 labels = df.columns[1:-1]
-colors = ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'pink', 'cyan', 'magenta', 'brown'] 
+colors = ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'pink', 'cyan', 'magenta', 'brown','gray'] 
 
 plt.pie(sizes, labels=labels, colors=colors)
 plt.title("Coefficients")
@@ -77,22 +89,60 @@ plt.show()
 fitted_values = model.predict(X_train)
 residuals = y_train - fitted_values
 plt.scatter(fitted_values, residuals,s=10)
-plt.xlabel('tahminler')
+plt.xlabel('Tahmin Edilen')
 plt.ylabel('Fark')
 plt.show()
 
-plt.scatter(y_train, fitted_values,)
-plt.xlabel('y_train')
-plt.ylabel('tahminler')
+plt.scatter(y_train, fitted_values,s=10)
+plt.xlabel('Gerçek Değer')
+plt.ylabel('Tahmin Edilen')
 plt.show()
 
-import statsmodels.api as sm
+
+plt.plot(y_test,color = 'blue')
+
+plt.plot(y_pred, color = 'orange')
+plt.show()
 
 residuals = y_train - fitted_values
 
 sm.qqplot(residuals, line='s')
 plt.show()
 
+sns.pairplot(df)
+plt.show()
+
+#svr,neuralnetwork,aynı ds,
+workbook = xlsxwriter.Workbook('.\saved\X_train.xlsx')
+worksheet = workbook.add_worksheet()
+col = 0
+for row, data in enumerate(X_train):
+    worksheet.write_row(row, col, data)
+workbook.close()
+
+
+workbook = xlsxwriter.Workbook('.\saved\X_test.xlsx')
+worksheet = workbook.add_worksheet()
+col = 0
+for row, data in enumerate(X_test):
+    worksheet.write_row(row, col, data)
+workbook.close()
+
+
+workbook = xlsxwriter.Workbook('.\saved\y_train.xlsx')
+worksheet = workbook.add_worksheet()
+col = 0
+for row, data in enumerate(y_train):
+    worksheet.write_row(row, col, data)
+workbook.close()
+
+
+workbook = xlsxwriter.Workbook('.\saved\y_test.xlsx')
+worksheet = workbook.add_worksheet()
+col = 0
+for row, data in enumerate(y_test):
+    worksheet.write_row(row, col, data)    
+workbook.close()
 
 
 
